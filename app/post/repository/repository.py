@@ -6,14 +6,15 @@ class PostRepository:
         self.database = database
     
 
-    def create_post(self,data):
+    def create_post(self,data) -> str:
         payload = {
             "type":data["type"],
             "price":data["price"],
             "address":data["address"],
             "area":data["area"],
-            "room_count":data["room_count"],
+            "rooms_count":data["rooms_count"],
             "description": data["description"]
         }
-
-        self.database["posts"].insert_one(payload)
+        result = self.database["posts"].insert_one(payload)
+        created_post_id = str(result.inserted_id)
+        return created_post_id

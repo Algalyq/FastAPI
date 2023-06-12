@@ -11,18 +11,15 @@ class PostCreateRequest(AppModel):
     price: int
     address: str
     area: float
-    room_count: int
+    rooms_count: int
     description: str
 
 class PostCreateResponse(AppModel):
-    _id : str
+    id : str
 
-@router.post("/",response_model=PostCreateResponse)
+@router.post("/",response_model=PostCreateResponse,status_code=status.HTTP_201_CREATED)
 def create_post(input: PostCreateRequest,svc_post: PostsService = Depends(get_service),):
-    print(input)
-    done = svc_post.repository.create_post(input.dict())
-
-    if done:
-        print(done)
-        return {"message":status.HTTP_200_OK}
-    return {"message":status.HTTP_400_BAD_REQUEST}
+    
+    id = svc_post.repository.create_post(input.dict())
+    
+    return PostCreateResponse(id=id)
