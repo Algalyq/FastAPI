@@ -18,3 +18,8 @@ class PostRepository:
         result = self.database["posts"].insert_one(payload)
         created_post_id = str(result.inserted_id)
         return created_post_id
+
+            
+    def get_post_by_id(self, post_id):
+        post = self.database["posts"].find_one({"_id": ObjectId(post_id)})
+        return post    
