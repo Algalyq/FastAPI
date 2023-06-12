@@ -2,9 +2,8 @@ from pydantic import BaseSettings
 
 from app.config import database
 
-from .adapters.jwt_service import JwtService
+from ..auth.adapters.jwt_service import JwtService
 from .repository.repository import *
-
 
 class AuthConfig(BaseSettings):
     JWT_ALG: str = "HS256"
@@ -15,19 +14,16 @@ class AuthConfig(BaseSettings):
 config = AuthConfig()
 
 
-class Service:
-    def __init__(
-        self,
-        repository: AuthRepository,
-        jwt_svc: JwtService,
-    ):
+class PostsService:
+    def __init__(self,repository: PostRepository,jwt_svc: JwtService,):
         self.repository = repository
         self.jwt_svc = jwt_svc
 
-
 def get_service():
-    repository = AuthRepository(database)
     jwt_svc = JwtService(config.JWT_ALG, config.JWT_SECRET, config.JWT_EXP)
 
-    svc = Service(repository, jwt_svc)
-    return svc
+    post_repository = PostRepository(database)
+     
+    svc_post = PostsService(post_repository,jwt_svc)
+   
+    return svc_post

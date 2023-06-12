@@ -15,6 +15,9 @@ class AuthRepository:
             "email": user["email"],
             "password": hash_password(user["password"]),
             "created_at": datetime.utcnow(),
+            "phone": None,
+            "name": None,
+            "city": None
         }
 
         self.database["users"].insert_one(payload)
@@ -33,4 +36,20 @@ class AuthRepository:
                 "email": email,
             }
         )
+        test = self.database["users"]
         return user
+
+
+        
+       
+    def update_user_data(self, user_id: str, data: dict):
+            update_data = { }
+            if data.phone:
+                update_data["phone"] = data.phone
+            if data.name:
+                update_data["name"] = data.name
+            if data.city:
+                update_data["city"] = data.city
+            self.database["users"].update_one({"_id": ObjectId(user_id)},{"$set":update_data})
+
+
