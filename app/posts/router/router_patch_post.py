@@ -25,7 +25,7 @@ def update_post(
     input: PostPatchRequest,
     jwt_data: JWTData = Depends(parse_jwt_user_data),
     post_service: PostsService = Depends(get_service)
-):
+):  
     updated_post = post_service.repository.update_post_data(post_id, input)
     
     if update_post:

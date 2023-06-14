@@ -4,7 +4,6 @@ from pymongo.database import Database
 class PostRepository:
     def __init__(self,database:Database):
         self.database = database
-    
 
     def create_post(self,data) -> str:
         payload = {
@@ -19,10 +18,15 @@ class PostRepository:
         created_post_id = str(result.inserted_id)
         return created_post_id
 
-
     def get_post_by_id(self, post_id):
         post = self.database["posts"].find_one({"_id": ObjectId(post_id)})
-        return post    
+        images = self.database["images"].find({"post_id":post_id})
+       
+        if images:
+            post["media"] = [image["data"] for image in images]
+        else:
+            post["media"] = []
+        return post
 
     def update_post_data(self,post_id,data):
         update_data = {}
@@ -48,3 +52,21 @@ class PostRepository:
         if result.deleted_count == 1:
             return True
         return False    
+
+
+class ImagesRepository:
+    def __init__(self,database:Database):
+        self.database = database
+
+    def create_images(self,post_id,data):
+        payload = {
+            "post_id":post_id,
+            "data": data
+        }
+        result = self.database["images"].insert_one(payload)
+        created_post_id = str(result.inserted_id)
+        return created_post_id
+
+
+        
+            

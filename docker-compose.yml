@@ -1,18 +1,23 @@
 version: "3.8"
 
 services:
-  # app:
-  #   build:
-  #     context: .
-  #     dockerfile: ./deploy/docker/Dockerfile.dev
-  #   env_file:
-  #     - .env
-  #   volumes:
-  #     - ./:/code
-  #   ports:
-  #     - "8000:8000"
-  #   depends_on:
-  #     - mongodb
+  app:
+    build:
+      context: .
+      dockerfile: ./deploy/dockerfiles/Dockerfile
+    environment:
+      - MONGOHOST=mongodb
+    env_file: .env # <--------- Добавить эту линию к сервису `app`
+    volumes:
+      - ./:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongodb
+    # environment:
+    #   - MONGOHOST=mongodb 
+    #   - AWS_ACCESS_KEY_ID=AKIAVL2UUMTHJPUZW6HV
+    #   - AWS_SECRET_ACCESS_KEY=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
 
   mongodb:
     image: mongo:4.4.6-bionic

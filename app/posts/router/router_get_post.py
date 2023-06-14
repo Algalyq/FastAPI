@@ -10,13 +10,15 @@ from . import router
 
 class PostGetResponse(AppModel):
     id: Any = Field(alias="_id")
+    # post_id: str
+    # data: list
     type: str
     price: int
     address: str
     area: float
     rooms_count: int
     description: str
-
+    media: list
 
 @router.get("/{post_id}", response_model=PostGetResponse)
 def get_post_id(
@@ -24,7 +26,7 @@ def get_post_id(
     post_service: PostsService = Depends(get_service)
 ):
     post = post_service.repository.get_post_by_id(post_id)
-    
+  
     if post:
         return PostGetResponse(**post)
     

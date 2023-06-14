@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from app.auth.router import router as auth_router
-from app.post.router import router as post_router
+from app.posts.router import router as post_router
 from app.config import client, env, fastapi_config
 
 app = FastAPI(**fastapi_config)
