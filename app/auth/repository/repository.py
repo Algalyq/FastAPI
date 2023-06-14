@@ -43,13 +43,13 @@ class AuthRepository:
         
        
     def update_user_data(self, user_id: str, data: dict):
-            update_data = { }
-            if data.phone:
-                update_data["phone"] = data.phone
-            if data.name:
-                update_data["name"] = data.name
-            if data.city:
-                update_data["city"] = data.city
-            self.database["users"].update_one({"_id": ObjectId(user_id)},{"$set":update_data})
-
+        update_data = { }
+        if data.phone:
+            update_data["phone"] = data.phone
+        if data.name:
+            update_data["name"] = data.name
+        if data.city:
+            update_data["city"] = data.city
+        self.database["users"].update_one({"_id": ObjectId(user_id)},{"$set":update_data})
+    
 

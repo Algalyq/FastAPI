@@ -1,5 +1,6 @@
 from bson.objectid import ObjectId
 from pymongo.database import Database
+from datetime import datetime
 
 class PostRepository:
     def __init__(self,database:Database):
@@ -68,5 +69,40 @@ class ImagesRepository:
         return created_post_id
 
 
-        
+    def delete_images_by_post_id(self, post_id):
+        result = self.database["images"].delete_many({"post_id":post_id})
+        if result.deleted_count == 1:
+            return True
+        return False    
+
             
+class CommentRepository:
+    def __init__(self,database:Database):
+        self.database = database
+    
+
+    def create_comment(self,post_id,user_id,data):
+        payload = {
+            "post_id": post_id,
+            "created_at": datetime.utcnow(),
+            "content": data,
+            "author_id": user_id
+        }
+
+        result = self.database["comments"].insert_one(payload)
+        return result
+
+    def update_comment(self,comment_id,data):
+        update_data = {}
+        if data:
+            print(data)
+            update_data["content"] = data
+        
+        result = self.database["comments"].update_one({"_id":ObjectId(comment_id)}, {"$set":update_data})
+        return result
+
+    def delete_comment(self,comment_id):
+        result = self.database["comments"].delete_one({"_id":ObjectId(comment_id)})
+        if result.deleted_count == 1:
+            return True
+        return False   
