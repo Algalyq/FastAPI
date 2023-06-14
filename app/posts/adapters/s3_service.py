@@ -29,3 +29,9 @@ class S3Service:
         )
 
         return object_url
+
+    def delete_file(self, filename: str):
+        bucket = "algalyq-bucket"
+        filekey = f"posts/{filename}"
+        self.s3.delete_object(Bucket=bucket, Key=filekey)
+        return True
