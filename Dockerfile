@@ -10,7 +10,7 @@ FROM python:3.11
 
 WORKDIR /code
 COPY --from=requirements-stage /tmp/requirements.txt .
-RUN pip install --no-cache-dir --upgrade -r ./requirements.txt
+RUN pip install --no-cache-dir --upgrade -r ./requirements.txt && pip install boto3
 COPY . .
 
 ENTRYPOINT ["sh", "./scripts/launch_prod.sh"]
