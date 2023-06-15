@@ -17,7 +17,8 @@ class AuthRepository:
             "created_at": datetime.utcnow(),
             "phone": None,
             "name": None,
-            "city": None
+            "city": None,
+            "avatar_url":None
         }
 
         self.database["users"].insert_one(payload)
@@ -52,4 +53,56 @@ class AuthRepository:
             update_data["city"] = data.city
         self.database["users"].update_one({"_id": ObjectId(user_id)},{"$set":update_data})
     
+    def post_avatar_user(self,user_id: str,path: str):
+        update_data = {}
+        if path:
+            update_data["avatar_url"] = path
+        result = self.database["users"].update_one({"_id": ObjectId(user_id)},{"$set":update_data})
+        return result
 
+    def delete_avatar_user(self, user_id: str):
+        filter = {"_id": ObjectId(user_id)}
+        update = {"$unset": {"avatar_url": ""}}
+        result = self.database["users"].update_one(filter, update)
+
+
+        if result.modified_count > 0:
+            return True
+        
+        return False
+
+
+class FavoritesRepository:
+    def __init__(self,database:Database):
+        self.database = database
+
+
+    def create_fav(self,user_id: str, data: dict):
+        payload = {
+            "user_id": user_id,
+            "address": data
+        }
+        self.database["favorites"].insert_one(payload)
+        return True
+
+
+    def get_favorites(self,user_id: str):
+        result = self.database["favorites"].find({"user_id":user_id})
+
+        favorites = []
+        for item in result:
+            favorites.append({
+                "_id": str(item["_id"]),
+                "address": item["address"]
+            })
+
+        if favorites:
+            return favorites
+
+        return {}
+
+    def delete_favorites(self,id: str):
+        result = self.database["favorites"].delete_one({"_id":ObjectId(id)})
+        if result.deleted_count == 1:
+            return True
+        return False

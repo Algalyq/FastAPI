@@ -1,24 +1,20 @@
 from typing import Any
-
-from fastapi import Depends, status
+from fastapi import Depends, UploadFile,status
 from pydantic import Field
-
 from app.utils import AppModel
-
 from ..adapters.jwt_service import JWTData
 from ..service import Service, get_service
 from . import router
 from .dependencies import parse_jwt_user_data
-
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-
 
 class GetMyAccountResponse(AppModel):
     id: Any = Field(alias="_id")
     email: str
-    phone: str
-    name: str
-    city: str
+    phone: str = ""
+    name: str = ""
+    city: str = ""
+    avatar_url: str = ""
 
 
 @router.get("/users/me", response_model=GetMyAccountResponse)
@@ -43,3 +39,19 @@ def update_data(
 ):
     svc.repository.update_user_data(jwt_data.user_id, input)
     return {"status":status.HTTP_200_OK}
+
+
+# @router.post("/users/me")
+# def add_avatar_user(
+#     file: UploadFile,
+#     svc: Service = Depends(get_service),
+#     jwt_data: JWTData = Depends(parse_jwt_user_data)
+# ):
+#     url = svc.s3_service.upload_file(file.file, file.filename)
+
+#     result = svc.repository.post_avatar_user(jwt_data.user_id, url)
+
+
+#     if result:
+#         return {"msg":status.HTTP_200_OK}
+#     return {"msg":status.HTTP_400_BAD_REQUEST}

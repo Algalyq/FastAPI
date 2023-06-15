@@ -1,7 +1,7 @@
 from fastapi import Depends, UploadFile,status
 from typing import List
 
-from ..service import PostsService, get_service
+from ..service import Service, get_service
 from . import router
 from ...auth.adapters.jwt_service import JWTData
 from ...auth.router.dependencies import parse_jwt_user_data
@@ -12,14 +12,13 @@ from ...auth.service import Service,get_service as auth_service
 def upload_file(
     post_id: str,
     file: UploadFile,
-    svc: PostsService = Depends(get_service),
+    svc: Service = Depends(get_service),
     auth_svc: Service = Depends(auth_service),
     jwt_data: JWTData = Depends(parse_jwt_user_data)
 
 ):
-    user = auth_svc.repository.get_user_by_id(jwt_data.user_id)
-    if user:
-        url = svc.s3_service.upload_file(file.file, file.filename)
+
+    url = svc.s3_service.upload_file(file.file, file.filename)
     id = svc.images.create_images(post_id, url)
     if id:
         return {"msg":status.HTTP_200_OK}
@@ -29,7 +28,7 @@ def upload_file(
 def upload_files(
     post_id: str,
     files: List[UploadFile],
-    svc: PostsService = Depends(get_service),
+    svc: Service = Depends(get_service),
     jwt_data: JWTData = Depends(parse_jwt_user_data)
 ):
     result = []
@@ -50,7 +49,7 @@ def delete_images_by_post_id(
     post_id: str,
     input: DeleteImageRequest,
     jwt_data: JWTData = Depends(parse_jwt_user_data),
-    svc: PostsService = Depends(get_service)
+    svc: Service = Depends(get_service)
 ):
     post_images = svc.images.delete_images_by_post_id(post_id)
     # for i in input:

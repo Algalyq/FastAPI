@@ -6,7 +6,7 @@ from app.utils import AppModel
 
 from ...auth.adapters.jwt_service import JWTData
 from ...auth.service import Service,get_service as auth_service
-from ..service import PostsService, get_service
+from ..service import Service as PostService,get_service
 from . import router
 from ...auth.router.dependencies import parse_jwt_user_data
 
@@ -20,7 +20,7 @@ class CommentCreateRequest(AppModel):
 def create_comment(
     post_id: str,   
     input: CommentCreateRequest,
-    svc: PostsService = Depends(get_service),
+    svc: PostService = Depends(get_service),
     auth_svc: Service = Depends(auth_service),
     jwt_data: JWTData = Depends(parse_jwt_user_data),
     ):
@@ -38,7 +38,7 @@ def create_comment(
 def delete_images_by_post_id(
     post_id: str,  
     comment_id: str,
-    svc: PostsService = Depends(get_service),
+    svc: PostService = Depends(get_service),
     auth_svc: Service = Depends(auth_service),
     jwt_data: JWTData = Depends(parse_jwt_user_data),
     ):
@@ -62,7 +62,7 @@ def update_comment(
     input: CommentUpdateRequest,
     jwt_data: JWTData = Depends(parse_jwt_user_data), 
     auth_svc: Service = Depends(auth_service),
-    svc: PostsService = Depends(get_service)
+    svc: PostService = Depends(get_service)
 ):  
     user = auth_svc.repository.get_user_by_id(jwt_data.user_id)
     if user:

@@ -7,7 +7,7 @@ class S3Service:
 
     def upload_file(self, file: BinaryIO, filename: str):
         bucket = "algalyq-bucket"
-        filekey = f"posts/{filename}"
+        filekey = f"users/{filename}"
 
         self.s3.upload_fileobj(file, bucket, filekey)
         
