@@ -16,7 +16,7 @@ class CommentUpdateRequest(AppModel):
 
 
 @router.patch("/{post_id}/comments/{comment_id}")
-def update_post(
+def update_comment(
     post_id: str,
     comment_id: str,
     input: CommentUpdateRequest,
