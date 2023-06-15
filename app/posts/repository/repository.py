@@ -22,9 +22,11 @@ class PostRepository:
     def get_post_by_id(self, post_id):
         post = self.database["posts"].find_one({"_id": ObjectId(post_id)})
         images = self.database["images"].find({"post_id":post_id})
-       
+        merged_list = []
+        for image in images:
+            merged_list.extend(image["data"])
         if images:
-            post["media"] = [image["data"] for image in images]
+            post["media"] = merged_list
         else:
             post["media"] = []
         return post
@@ -62,7 +64,7 @@ class ImagesRepository:
     def create_images(self,post_id,data):
         payload = {
             "post_id":post_id,
-            "data": data
+            "data": [data]
         }
         result = self.database["images"].insert_one(payload)
         created_post_id = str(result.inserted_id)
