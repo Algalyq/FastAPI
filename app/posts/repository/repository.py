@@ -108,3 +108,20 @@ class CommentRepository:
         if result.deleted_count == 1:
             return True
         return False   
+    
+    def get_comments(self,post_id):
+        result = self.database["comments"].find({"post_id":post_id})
+
+        comments = []
+        for item in result:
+            comments.append({
+                "_id": str(item["_id"]),
+                "content": item["content"],
+                "created_at":item["created_at"],
+                "author_id":item["author_id"]
+            })
+
+        if comments:
+            return comments
+
+        return {}

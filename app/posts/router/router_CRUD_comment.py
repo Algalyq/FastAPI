@@ -11,6 +11,22 @@ from . import router
 from ...auth.router.dependencies import parse_jwt_user_data
 
 
+class CommentGetResponse(AppModel):
+    comments: list
+
+@router.get("/{post_id}/comments",response_model=CommentGetResponse)
+def get_comments(
+    post_id: str,
+    svc: PostService = Depends(get_service),
+    auth_svc: Service = Depends(auth_service),
+    jwt_data: JWTData = Depends(parse_jwt_user_data),
+):
+
+    result = svc.comment.get_comments(post_id)
+
+    return CommentGetResponse(comments=result)
+    
+
 
 class CommentCreateRequest(AppModel):
     content: str
