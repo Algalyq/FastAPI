@@ -13,7 +13,8 @@ class PostRepository:
             "address":data["address"],
             "area":data["area"],
             "rooms_count":data["rooms_count"],
-            "description": data["description"]
+            "description": data["description"],
+            "approve": False
         }
         result = self.database["posts"].insert_one(payload)
         created_post_id = str(result.inserted_id)
@@ -30,6 +31,23 @@ class PostRepository:
         else:
             post["media"] = []
         return post
+
+    def get_post_approved(self):
+        posts = list(self.database["posts"].find({}))
+        objects = []
+        for item in posts:
+            if item["approve"] == True:
+                objects.append({
+                "_id": str(item["_id"]),
+                "type": item["type"],
+                "price": item["price"],
+                "address": item["address"],
+                "area": item["area"],
+                "rooms_count": item["rooms_count"],
+                "approve":item["approve"]
+            })
+        return objects
+    
 
     def update_post_data(self,post_id,data):
         update_data = {}
@@ -55,6 +73,51 @@ class PostRepository:
         if result.deleted_count == 1:
             return True
         return False    
+
+    def search_pagination(self,query: dict,):
+        total = self.database["posts"].count_documents(query)
+        posts = self.database["posts"].find(query).sort("_id",-1).skip(offset).limit(limit)
+        objects = []
+        for item in posts:
+            objects.append({
+                "_id": str(item["_id"]),
+                "type": item["type"],
+                "price": item["price"],
+                "address": item["address"],
+                "area": item["area"],
+                "rooms_count": item["rooms_count"],
+            })
+        result = {
+            "total": total,
+            "objects": objects
+        }
+        return result
+
+    def get_post_to_approve(self,offset: int, limit: int):
+        posts = list(self.database["posts"].find().sort("_id",-1).skip(offset).limit(limit))
+        objects = []
+        for item in posts:
+            if item["approve"] != True and item["approve"] != None:
+                objects.append({
+                "_id": str(item["_id"]),
+                "type": item["type"],
+                "price": item["price"],
+                "address": item["address"],
+                "area": item["area"],
+                "rooms_count": item["rooms_count"]
+            })
+        return objects
+
+
+    def update_to_approve(self,id: str):
+        update_data = {"approve":True}
+        posts = self.database["posts"].update_one({"_id":ObjectId(id)},{"$set":update_data})
+        return posts
+
+    def update_to_decline(self,id: str):
+        update_data = {"approve":None}
+        posts = self.database["posts"].update_one({"_id":ObjectId(id)},{"$set":update_data})
+        return posts
 
 
 class ImagesRepository:

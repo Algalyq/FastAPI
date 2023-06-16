@@ -17,3 +17,15 @@ def parse_jwt_user_data(
         raise AuthenticationRequiredException
 
     return token
+
+
+
+def parse_jwt_moderator_data(
+    token: str = Depends(oauth2_scheme),
+    svc: Service = Depends(get_service),
+) -> JWTData:
+    token = svc.jwt_svc.parse_jwt_moderator_data(token)
+    if not token:
+        raise AuthenticationRequiredException
+
+    return token

@@ -18,7 +18,8 @@ class AuthRepository:
             "phone": "",
             "name": "",
             "city": "",
-            "avatar_url":""
+            "avatar_url":"",
+            "role":"user"
         }
 
         self.database["users"].insert_one(payload)

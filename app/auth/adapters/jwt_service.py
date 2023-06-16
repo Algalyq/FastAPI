@@ -27,6 +27,7 @@ class JwtService:
 
         jwt_data = {
             "sub": str(user["_id"]),
+            "role": user["role"],
             "exp": datetime.utcnow() + expires_delta,
         }
 
@@ -41,9 +42,23 @@ class JwtService:
         except JWTError:
             raise InvalidToken()
 
+        
         return JWTData(**payload)
 
+    def parse_jwt_moderator_data(self, token: str) -> JWTData | None:
+        if not token:
+            return None
 
+        try:
+            payload = jwt.decode(token, self.secret, algorithms=[self.algorithm])
+        except JWTError:
+            raise InvalidToken()
+
+        
+        if "role"  in payload:
+            if "role" == "moderator":
+                return JWTData(**payload)
+        return None
 class AuthorizationFailed(Exception):
     pass
 
