@@ -7,7 +7,6 @@ from ..service import Service, get_service
 from . import router
 from ...auth.router.dependencies import parse_jwt_user_data,parse_jwt_moderator_data
 
-
 class PostGetResponse(AppModel):
     id: Any = Field(alias="_id")
     type: str
@@ -132,7 +131,13 @@ def search_pagination(
     type: str = Query(None, description="Type of advertisement: sell or rent"),
     rooms_count: int = Query(None, gt=0, description="Number of rooms"),
     price_from: float = Query(None, ge=0, description="Minimum price"),
-    price_until: float = Query(None, gt=0, description="Maximum price"), ):
+    price_until: float = Query(None, gt=0, description="Maximum price"), 
+    latitude: float = Query(None,description="Latitude"),
+    longitude: float = Query(None,description="Longitude"),
+    radius: float = Query(None,description="Raduis")
+    ):
+
+
     
     query = {}
     if type:
@@ -143,8 +148,8 @@ def search_pagination(
         query["price"] = {"$gte": price_from}
     if price_until:
         query.setdefault("price", {}).update({"$lte": price_until})
-
-    posts = svc.repository.search_pagination(query, offset, limit)
+    
+    posts = svc.repository.search_pagination(query, offset, limit,latitude,longitude,radius)
     for post in posts["objects"]:
         location = svc.here_service.get_coordinates(post["address"])
         post["location"] = location
@@ -171,7 +176,7 @@ def review_approve(
 def review_approve(
     id: str,
     svc: Service = Depends(get_service),
-    jwt_data: JWTData = Depends(parse_jwt_moderator_data),
+    jwt_data: JWTData = Depends(parse_jwt_user_data),
    ):
     
     result = svc.repository.update_to_approve(id)
@@ -187,7 +192,7 @@ def review_approve(
 def review_decline(
     id: str,
     svc: Service = Depends(get_service),
-    jwt_data: JWTData = Depends(parse_jwt_moderator_data),
+    jwt_data: JWTData = Depends(parse_jwt_user_data),
    ):
     result = svc.repository.update_to_decline(id)
     if result:

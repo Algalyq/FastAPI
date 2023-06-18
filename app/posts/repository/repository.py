@@ -2,6 +2,9 @@ from bson.objectid import ObjectId
 from pymongo.database import Database
 from datetime import datetime
 
+from fastapi import Depends
+# from ..service import Service,get_service
+from geopy.distance import distance
 class PostRepository:
     def __init__(self,database:Database):
         self.database = database
@@ -74,10 +77,17 @@ class PostRepository:
             return True
         return False    
 
-    def search_pagination(self,query: dict,):
+    def search_pagination(self,query: dict,offset: int, limit: int):
         total = self.database["posts"].count_documents(query)
-        posts = self.database["posts"].find(query).sort("_id",-1).skip(offset).limit(limit)
+        posts = self.database["posts"].find(query)
         objects = []
+        
+        
+        if latitude is not None and longitude is not None and radius is not None:
+            posts = self.filter_by_location(posts, latitude, longitude, radius)
+
+        posts = posts.sort("_id",-1).skip(offset).limit(limit)
+       
         for item in posts:
             objects.append({
                 "_id": str(item["_id"]),
@@ -92,6 +102,22 @@ class PostRepository:
             "objects": objects
         }
         return result
+
+    # def filter_by_location(self, posts, latitude, longitude, radius):
+    #     filtered_posts = []
+    #     center = (latitude, longitude)
+    #     svc: Service = Depends(get_service)
+        
+    #     for item in posts:
+            
+    #         location = svc.here_service.get_coordinates(item["address"])
+    #         if location is not None:
+    #             post_location = (location.latitude, location.longitude)
+    #             dist = distance(center, post_location)
+    #             if dist <= radius:
+    #                 filtered_posts.append(item)
+
+    #     return filtered_posts
 
     def get_post_to_approve(self,offset: int, limit: int):
         posts = list(self.database["posts"].find().sort("_id",-1).skip(offset).limit(limit))

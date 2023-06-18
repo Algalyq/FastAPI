@@ -1,6 +1,7 @@
 from fastapi import Depends, UploadFile,status
 from typing import List
 
+from app.utils import AppModel
 from ..service import Service, get_service
 from . import router
 from ...auth.adapters.jwt_service import JWTData

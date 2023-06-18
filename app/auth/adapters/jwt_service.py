@@ -56,9 +56,10 @@ class JwtService:
 
         
         if "role"  in payload:
-            if "role" == "moderator":
+            if payload["role"] == "moderator":
                 return JWTData(**payload)
         return None
+
 class AuthorizationFailed(Exception):
     pass
 

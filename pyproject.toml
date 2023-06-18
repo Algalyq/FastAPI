@@ -19,6 +19,8 @@ requests = "^2.31.0"
 boto3 = "^1.26.153"
 botocore = "^1.29.153"
 s3transfer = "^0.6.1"
+distance = "^0.1.3"
+geopy = "^2.3.0"
 
 [tool.poetry.group.dev.dependencies]
 types-python-jose = "^3.3.4.7"
