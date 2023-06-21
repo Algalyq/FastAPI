@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from app.auth.router import router as auth_router
-from app.posts.router import router as post_router
+from app.api.router import router as api_router
 from app.config import client, env, fastapi_config
 
 app = FastAPI(**fastapi_config)
@@ -22,4 +22,4 @@ app.add_middleware(
 )
 
 app.include_router(auth_router, prefix="/auth", tags=["Auth"])
-app.include_router(post_router,prefix="/shanyraks",tags=["Shanyrak"])
+app.include_router(api_router, prefix="/api", tags=["API"])
