@@ -24,6 +24,12 @@ geopy = "^2.3.0"
 stability-sdk = "^0.8.1"
 matplotlib = "^3.7.1"
 ipython = "^8.14.0"
+opencv-python = "^4.7.0.72"
+numpy = "^1.25.0"
+glob2 = "^0.7"
+opencv-contrib-python = "^4.7.0.72"
+imageio = "^2.31.1"
+opencv-contrib-python-headless = "^4.7.0.72"
 
 [tool.poetry.group.dev.dependencies]
 types-python-jose = "^3.3.4.7"
