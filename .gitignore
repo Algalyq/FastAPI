@@ -106,7 +106,7 @@ celerybeat.pid
 .env.prefect
 .venv
 env/
-cert/
+cert/*.json
 venv/
 ENV/
 env.bak/
