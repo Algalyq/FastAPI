@@ -1,0 +1,13 @@
+{
+    "type": "service_account",
+    "project_id": "bionic-eye-384308",
+    "private_key_id": "2c868f14f70cb77afdec68fee6dacbfbedc85c37",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC8+gAVfKqE+Qoc\nxw5zRHGVtVZoJ3iFe5Uj32Jftis/REHDMsXIJyKmHWJFtcLoFwCDA5M9maYANFgx\n/SwfFR0+sQ/KfAgpBIIBYCHqBaCSS42C4blreD+TFavkGwL2/HHQHFCX9ZhCxgC4\nsT7JBSgcCaDT3uqQi+EeMJoX4LPUOSSE/genQoQc6ISHlTdVwjRjXiHtZxhJV7It\nXD6/8l3/s/6VqhL090NaVfeMpmP/uqY/azKbOLlfm0WaovFemsu1fj+rlod9ZLIx\nH8Ge17/drATPPLD15E12HhdzIECzaH8RFJ9kkCE0nX69X9Mpie4VZJ6M1JXjZtEs\nOclPMcItAgMBAAECggEACCnIfSUgfJQBctLKdgI74dque9tQont/KsiIiFfnMFlz\necokrwu5vHFCgH5kiAAOXpp17tBHUnTwZmBoWoNf+whNBVMsSxFNyF9tt508nXU0\nDLZReyn7nQ/vl+/uxdqL1BCVDqtmQ2QoPdIyQx6859EmqGBVw563P8WbsnJbckxe\nlDqaZzEGUI73ARuuLoQDHQ151rTOgV6R4qmd0KLY+KlX6h0MQV15D81t1eK1Aso3\nauZ+FEc89DM8Wk5b/rwxhLG7XiNk9NVX5f9NnlalxZ/ImNELUv2alqA2+pAue77L\nkg+7Rmka69EIfo0ST5GDGhJsgyEmQZ2Frz1rN/5fpQKBgQDqMbK6+AGz3eWOJZVu\nN01n5aGdunh686S6sua12F9p/McNspdf3DHmWE46XnNpADsWFqnOh+WRVq7SYsC5\nah27qMCDbiLJDDsMtLZZRBq708kS2POfogyNUld7Ej0Q7yeWnoPQh2HHN72g6xTp\nQ/8tzA/Oy05bbDuGFHbmxAFZjwKBgQDOknyGfHwWi8JYq7nb6P8BYqUyKjFUtKQd\nEzxukT8ScH6/kBBn0uUnuKYzVzRBfInxifkYlt42dq9ztjyeZpdDg1v6SPU6N3Fh\nLrdkC9yQoPDCtGVy/GfuDlzBkHAReuRIIfevHHIkXxUwx+7H1owMAwWLV8E+Gpdq\n2raiwU0ygwKBgHsG+Jl3x40xuHHgFIv9yVAXNbuiRcBxVcwuRzyoGheXjwoHE7Zr\n+lrDcPUAwSgb0u5boYC5q0OageRLtGqy8EOw9tEUfnmXTz3xgQmL2W9qZmrcRb9K\nZcWnyAUDI8lNmUJqq1xUgm0hPyDV3fpcmiT42iUMcHFefjaFcaDwvrTJAoGAPwsD\nyAN712Gl2WvnWA7+rEyPwASSc5iBsYHqYpAfYKBGfm4YI6eAWiQHTQnjH81DSBzk\nkbWRcau9FiJa07jZlzgivPrBJJhBGPip7XWVRepoL/PgNjyD92oYstZC7YLE4qLD\nNYUH7MO78txBqml26j+N1J3ekvaImYrQTFGUHsMCgYBpR55msb0VYtPdZWIaCr6T\n3CX1JvNNjaMc7XiQOtypI1sdAE0lf/SoTDSEwFhEeEEwBxTbsopmteGTmtQOyF+r\neua/JA5LTxBRRzxi5S4hVaTE3Vh5zuEmq3EfbMIsd3pp28ZG2xeibAhRq8mpug2b\nSbof/QhJcyP8WYp3yu6HEw==\n-----END PRIVATE KEY-----\n",
+    "client_email": "algalyq-storage@bionic-eye-384308.iam.gserviceaccount.com",
+    "client_id": "106846502997211786566",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/algalyq-storage%40bionic-eye-384308.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
+  }
