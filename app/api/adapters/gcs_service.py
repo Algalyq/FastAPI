@@ -69,7 +69,7 @@ class GCStorage:
         
         blob = bucket.blob(output_file)
         blob.upload_from_filename(output_file)
-        os.remove(output_file)
+
 
         return f"https://storage.googleapis.com/{self.bucket_name}/{output_file}"
             
