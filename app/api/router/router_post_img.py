@@ -28,16 +28,15 @@ def upload(
     video = svc.gcs_service.generate_video_from_links(urls,output_file)
     return {"msg":video}
 
-# @router.get("/videos")
-# async def get_videos(
-#     svc: Service = Depends(get_service)
-# ):
-#     video_dir = "static/images"  # Path to your static video directory
-#     video_files = []
-
-#     for root, dirs, files in os.walk(video_dir):
-#         for file in files:
-#             if file.endswith(""):  # Filter for video file extensions
-#                 video_files.append(os.path.join('localhost:8000',root, file))
-#     # result = svc.gcs_service.list_images()
-#     return {"videos": video_files}
+@router.post("/fileUp")
+def upload_to_journey(
+    file: UploadFile,
+    prompt: str = Form(...),
+    duration: int = Form(...),
+    svc: Service = Depends(get_service)
+):
+    gcs = svc.gcs_service.upload_img(file)
+    result = svc.openjourney.create_images(gcs,n=duration,prompt=prompt)
+    output_file = 'result.mp4'
+    video = svc.gcs_service.generate_video_from_links(result, output_file)
+    return {"msg":video}

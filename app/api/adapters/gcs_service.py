@@ -2,6 +2,7 @@ from google.cloud import storage
 import os 
 import cv2
 import base64   
+from typing import BinaryIO
 import uuid
 import io
 import os
@@ -18,6 +19,14 @@ class GCStorage:
     def __init__(self):
         self.storage_client = storage.Client()
         self.bucket_name = 'algalyq-bucket'
+
+
+    def upload_img(self, image):
+        bucket = self.storage_client.get_bucket(self.bucket_name)
+        file_path = "images/" + image.filename
+        blob = bucket.blob(file_path)
+        blob.upload_from_file(image.file, content_type='image/jpeg')
+        return blob.public_url
 
 
     def upload_file(self,base64_image: list):
@@ -52,7 +61,7 @@ class GCStorage:
 
   
     # Create a writer object to save the video frames directly to Google Cloud Storage
-        writer = imageio.get_writer(output_file, fps=12)
+        writer = imageio.get_writer(output_file, fps=4)
 
         # Write each image to the video
         for image in images:
