@@ -9,12 +9,12 @@ class Config(BaseSettings):
     CORS_HEADERS: list[str] = ["*"]
     CORS_METHODS: list[str] = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
 
-    MONGOHOST: str
-    MONGOPORT: str
-    MONGOUSER: str
-    MONGOPASSWORD: str
-    MONGODATABASE: str
-    MONGO_URL: str
+    MONGOHOST: str = "localhost"
+    MONGOPORT: str = "27017"
+    MONGOUSER: str = "algalyq"
+    MONGOPASSWORD: str = "2003720An"
+    MONGODATABASE: str = "fastapi"
+    MONGO_URL: str = "mongodb+srv://algalyq:2003720An@cluster0.zzr5jrn.mongodb.net/?retryWrites=true&w=majority"
 
 # environmental variables
 env = Config()
@@ -35,3 +35,4 @@ client = MongoClient(mongo_url)
 
 # MongoDB database
 database = client[env.MONGODATABASE]
+
