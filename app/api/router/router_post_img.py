@@ -10,40 +10,31 @@ from . import router
 # from ...auth.router.dependencies import parse_jwt_user_data
 
 
+
+
 @router.post("/test")
-def test_url(
+def upload_with_save(
     file: UploadFile,
+    prompt: str = Form(...),
+    duration: int = Form(...),
     svc: Service = Depends(get_service)
 ):
+    
     gcs = svc.gcs_service.upload_img(file)
-
-    return {"msg":gcs}
-
-
-
-# @router.post("/test")
-# def upload_with_save(
-#     file: UploadFile,
-#     prompt: str = Form(...),
-#     duration: int = Form(...),
-#     svc: Service = Depends(get_service)
-# ):
+    arr_img = []
     
-#     gcs = svc.gcs_service.upload_img(file)
-#     arr_img = []
-    
-#     result = svc.openjourney.create_images(gcs,n=duration,prompt=prompt)
-#     images_gcs = svc.gcs_service.upload_image_from_link(result[0])
-#     arr_img.append(images_gcs)
+    result = svc.openjourney.create_images(gcs,n=duration,prompt=prompt)
+    images_gcs = svc.gcs_service.upload_image_from_link(result[0])
+    arr_img.append(images_gcs)
 
-#     for i in range(2):
-#         result = svc.openjourney.create_images(arr_img[i], duration, prompt)
-#         arr_img.append(svc.gcs_service.upload_image_from_link(result[0]))  
+    for i in range(2):
+        result = svc.openjourney.create_images(arr_img[i], duration, prompt)
+        arr_img.append(svc.gcs_service.upload_image_from_link(result[0]))  
 
-#     video = svc.gcs_service.generate_video_from_frames(arr_img)
-#     return {
-#         "result": video
-#     }
+    video = svc.gcs_service.generate_video_from_frames(arr_img)
+    return {
+        "result": video
+    }
 
 
 
