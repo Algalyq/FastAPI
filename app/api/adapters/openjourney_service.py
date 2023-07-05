@@ -3,9 +3,9 @@ from dotenv import dotenv_values
 import replicate
 import requests
 
-env_vars = dotenv_values('.env')
-replicate_api_token = env_vars.get('REPLICATE_API_TOKEN')
-os.environ['REPLICATE_API_TOKEN'] = replicate_api_token
+# env_vars = dotenv_values('.env')
+# replicate_api_token = env_vars.get('REPLICATE_API_TOKEN')
+# os.environ['REPLICATE_API_TOKEN'] = replicate_api_token
 class OpenJourney:
     def __init__(self):
         pass
