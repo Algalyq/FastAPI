@@ -24,16 +24,16 @@ def upload_with_save(
     arr_img = []
     
     result = svc.openjourney.create_images(gcs,n=duration,prompt=prompt)
-    images_gcs = svc.gcs_service.upload_image_from_link(result[0])
-    arr_img.append(images_gcs)
+    # images_gcs = svc.gcs_service.upload_image_from_link(result[0])
+    # arr_img.append(images_gcs)
 
-    for i in range(2):
-        result = svc.openjourney.create_images(arr_img[i], duration, prompt)
-        arr_img.append(svc.gcs_service.upload_image_from_link(result[0]))  
+    # for i in range(2):
+    #     result = svc.openjourney.create_images(arr_img[i], duration, prompt)
+    #     arr_img.append(svc.gcs_service.upload_image_from_link(result[0]))  
 
-    video = svc.gcs_service.generate_video_from_frames(arr_img)
+    # video = svc.gcs_service.generate_video_from_frames(arr_img)
     return {
-        "result": video
+        "result": result
     }
 
 
