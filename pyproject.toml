@@ -37,6 +37,7 @@ moviepy = "^1.0.3"
 python-dotenv = "^1.0.0"
 uuid = "^1.30"
 python-io = "^0.3"
+pybase64 = "^1.2.3"
 
 [tool.poetry.group.dev.dependencies]
 types-python-jose = "^3.3.4.7"
