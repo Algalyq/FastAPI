@@ -6,12 +6,12 @@ authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10.6"
 bcrypt = "^4.0.1"
 python-jose = "^3.3.0"
 pydantic= {extras = ["email"], version = "^1.10.4"}
 fastapi = "^0.95.2"
-uvicorn= {extras = ["standard"], version = "^0.20.0"}
+uvicorn= {extras = ["standard"], version = "^0.22.0"}
 python-multipart = "^0.0.6"
 pymongo = "3.11"
 orjson = "^3.9.1"
@@ -27,15 +27,16 @@ ipython = "^8.14.0"
 opencv-python = "^4.7.0.72"
 numpy = "^1.25.0"
 glob2 = "^0.7"
-opencv-contrib-python = "^4.7.0.72"
 imageio = "^2.31.1"
-opencv-contrib-python-headless = "^4.7.0.72"
 google-cloud-storage = "^2.9.0"
 ffmpeg = "^1.4"
 imageio-ffmpeg = "^0.4.8"
 replicate = "^0.8.3"
 temp = "^2020.7.2"
 moviepy = "^1.0.3"
+python-dotenv = "^1.0.0"
+uuid = "^1.30"
+python-io = "^0.3"
 
 [tool.poetry.group.dev.dependencies]
 types-python-jose = "^3.3.4.7"

@@ -1,13 +1,9 @@
 from google.cloud import storage 
 import os 
-import cv2
 import base64   
 from typing import BinaryIO
 import uuid
 import io
-import os
-import warnings
-import cv2
 import numpy as np
 import imageio
 import requests
