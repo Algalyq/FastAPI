@@ -7,6 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10.6"
+appnope = "^0.1.2"
 bcrypt = "^4.0.1"
 python-jose = "^3.3.0"
 pydantic= {extras = ["email"], version = "^1.10.4"}
@@ -38,6 +39,7 @@ python-dotenv = "^1.0.0"
 uuid = "^1.30"
 python-io = "^0.3"
 pybase64 = "^1.2.3"
+pillow = "^10.0.0"
 
 [tool.poetry.group.dev.dependencies]
 types-python-jose = "^3.3.4.7"
