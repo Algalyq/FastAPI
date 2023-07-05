@@ -34,6 +34,8 @@ google-cloud-storage = "^2.9.0"
 ffmpeg = "^1.4"
 imageio-ffmpeg = "^0.4.8"
 replicate = "^0.8.3"
+temp = "^2020.7.2"
+moviepy = "^1.0.3"
 
 [tool.poetry.group.dev.dependencies]
 types-python-jose = "^3.3.4.7"

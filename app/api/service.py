@@ -9,7 +9,7 @@ from .adapters.openjourney_service import OpenJourney
 
 class Service:
     def __init__(self):
-        self.stability = Stability("sk-jEvURj5OkafmdPw9oBLEwf2EHOUYtn7ZTWAp4ymwqdBuol6B")
+        self.stability = Stability("sk-CXwXt1oUWYRyca6U1dAntZ5RSPNyTpW1kr6VEf3sGVhG6qiM")
         self.s3_service = S3Service()
         self.gcs_service = GCStorage()
         self.images = ImagesRepository(database)

@@ -29,8 +29,6 @@ class Stability:
         
         content = file.read()
         image_stream = io.BytesIO(content)
-
-        
         img = Image.open(image_stream)
             
         answers = stability_api.generate(
@@ -41,7 +39,8 @@ class Stability:
                 steps=30,
                 cfg_scale=8.0,
                 sampler=generation.SAMPLER_K_DPMPP_2M,
-                samples=duration
+                samples=duration * 10
+                
             )
 
         generated_images = []

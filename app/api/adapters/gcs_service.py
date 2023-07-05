@@ -11,6 +11,10 @@ import cv2
 import numpy as np
 import imageio
 import requests
+import urllib.request
+
+from moviepy.editor import ImageSequenceClip
+import tempfile
 from PIL import Image
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r'cert/gcs-key.json'
 
@@ -28,6 +32,20 @@ class GCStorage:
         blob.upload_from_file(image.file, content_type='image/jpeg')
         return blob.public_url
 
+    def upload_image_from_link(self,link):
+        # Fetch the image from the link
+        response = urllib.request.urlopen(link)
+        image_data = response.read()
+        bucket = self.storage_client.get_bucket(self.bucket_name)
+        gcs_filename = "images/" + str(uuid.uuid4())   
+        # Create a new blob with the desired filename
+        blob = bucket.blob(gcs_filename)
+        
+        # Upload the image data to the blob
+        blob.upload_from_string(image_data)
+
+        # Generate and return the public URL of the uploaded image
+        return f"https://storage.googleapis.com/{self.bucket_name}/{gcs_filename}"
 
     def upload_file(self,base64_image: list):
         bucket = self.storage_client.get_bucket(self.bucket_name)
@@ -79,6 +97,40 @@ class GCStorage:
         blob = bucket.blob(output_file)
         blob.upload_from_filename(output_file)
 
-
         return f"https://storage.googleapis.com/{self.bucket_name}/{output_file}"
             
+
+    def generate_video_from_frames(self, links):
+        frames = []
+        first_frame = None
+
+        for link in links:
+            # Fetch the image from the link
+            response = urllib.request.urlopen(link)
+            img = Image.open(response)
+            img_array = np.array(img)
+
+            # Resize the image if it doesn't match the size of the first frame
+            if first_frame is None:
+                first_frame = img
+            elif img.size != first_frame.size:
+                img = img.resize(first_frame.size)
+                img_array = np.array(img)
+
+            frames.append(img_array)
+
+        # Create the video clip from frames using moviepy
+        clip = ImageSequenceClip(frames, fps=4)
+
+        # Set up the temporary file for saving the video
+        output_filename = tempfile.mktemp(suffix=".mp4")
+        
+        # Save the video to the temporary file
+        clip.write_videofile(output_filename, codec="libx264")
+
+        # Upload the video file to Google Cloud Storage
+        bucket = self.storage_client.get_bucket(self.bucket_name)
+        blob = bucket.blob(output_filename[5:])
+        blob.upload_from_filename(output_filename)
+
+        return f"https://storage.googleapis.com/{self.bucket_name}/{output_filename[5:]}"
