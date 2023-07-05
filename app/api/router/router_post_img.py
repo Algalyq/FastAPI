@@ -10,7 +10,7 @@ from . import router
 # from ...auth.router.dependencies import parse_jwt_user_data
 
 
-@router.get("/test")
+@router.post("/test")
 def test_url(
     file: UploadFile,
     svc: Service = Depends(get_service)
