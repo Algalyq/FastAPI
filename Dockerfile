@@ -10,6 +10,8 @@ FROM python:3.11
 
 WORKDIR /code
 COPY --from=requirements-stage /tmp/requirements.txt .
+
+RUN apt update && apt install -y libsm6 libxext6 ffmpeg libfontconfig1 libxrender1 libgl1-mesa-glx
 RUN pip install --no-cache-dir --upgrade -r ./requirements.txt && pip install boto3
 COPY . .
 
