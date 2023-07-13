@@ -1,4 +1,4 @@
-from google.cloud import storage 
+from google.cloud import storage,translate
 import os 
 import base64   
 from typing import BinaryIO
@@ -8,11 +8,16 @@ import numpy as np
 import imageio
 import requests
 import urllib.request
-
 from moviepy.editor import ImageSequenceClip
 import tempfile
 from PIL import Image
+from googletrans import Translator
+ 
+
+
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r'cert/gcs-key.json'
+
+
 
 class GCStorage:
 
@@ -21,27 +26,64 @@ class GCStorage:
         self.bucket_name = 'algalyq-bucket'
 
 
+
+    def translate(self, text: str,fr: str,to: str):
+        client = translate.TranslationServiceClient()
+        project_id = "bionic-eye-384308"
+        location = "global"
+
+        parent = f"projects/{project_id}/locations/{location}"
+
+        # Translate text from English to French
+        # Detail on supported types can be found here:
+        # https://cloud.google.com/translate/docs/supported-formats
+        response = client.translate_text(
+            request={
+                "parent": parent,
+                "contents": [text],
+                "mime_type": "text/plain",  # mime types: text/plain, text/html
+                "source_language_code": fr,
+                "target_language_code": to,
+            }
+        )
+        result = ""
+        # Display the translation for each input text provided
+        for translation in response.translations:
+            result += translation.translated_text
+
+        return result
+
+
     def upload_img(self, image):
         bucket = self.storage_client.get_bucket(self.bucket_name)
         file_path = "images/" + image.filename
         blob = bucket.blob(file_path)
         blob.upload_from_file(image.file, content_type='image/jpeg')
         return blob.public_url
-
-    def upload_image_from_link(self,link):
-        # Fetch the image from the link
-        response = urllib.request.urlopen(link)
-        image_data = response.read()
-        bucket = self.storage_client.get_bucket(self.bucket_name)
-        gcs_filename = "images/" + str(uuid.uuid4())   
-        # Create a new blob with the desired filename
-        blob = bucket.blob(gcs_filename)
         
-        # Upload the image data to the blob
-        blob.upload_from_string(image_data)
+    def upload_image_from_link(self,links):
+        bucket = self.storage_client.get_bucket(self.bucket_name)
+        uploaded_image_links = []
 
-        # Generate and return the public URL of the uploaded image
-        return f"https://storage.googleapis.com/{self.bucket_name}/{gcs_filename}"
+        for link in links:
+            # Fetch the image from the link
+            response = urllib.request.urlopen(link)
+            image_data = response.read()
+
+            # Generate a unique filename for the image
+            gcs_filename = "images/" + str(uuid.uuid4())
+
+            # Create a new blob with the desired filename
+            blob = bucket.blob(gcs_filename)
+
+            # Upload the image data to the blob
+            blob.upload_from_string(image_data)
+
+            # Generate and store the public URL of the uploaded image
+            uploaded_image_url = f"https://storage.googleapis.com/{self.bucket_name}/{gcs_filename}"
+            uploaded_image_links.append(uploaded_image_url)
+
+        return uploaded_image_links
 
     def upload_file(self,base64_image: list):
         bucket = self.storage_client.get_bucket(self.bucket_name)
@@ -116,7 +158,7 @@ class GCStorage:
             frames.append(img_array)
 
         # Create the video clip from frames using moviepy
-        clip = ImageSequenceClip(frames, fps=4)
+        clip = ImageSequenceClip(frames, fps=12)
 
         # Set up the temporary file for saving the video
         output_filename = tempfile.mktemp(suffix=".mp4")

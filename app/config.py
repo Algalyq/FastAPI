@@ -21,7 +21,7 @@ env = Config()
 username = quote_plus(env.MONGOUSER)
 password = quote_plus(env.MONGOPASSWORD)
 mongo_url = f"mongodb+srv://{username}:{password}@cluster0.zzr5jrn.mongodb.net/?retryWrites=true&w=majority"
-print(mongo_url)
+
 # FastAPI configurations
 fastapi_config: dict[str, Any] = {
     "title": "API test",
