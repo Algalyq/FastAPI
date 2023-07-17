@@ -5,9 +5,9 @@ from pymongo import MongoClient
 from urllib.parse import quote_plus
 
 class Config(BaseSettings):
-    CORS_ORIGINS: list[str] = ["*"]
+    CORS_ORIGINS: list[str] = ["http://localhost:3000"]
     CORS_HEADERS: list[str] = ["*"]
-    CORS_METHODS: list[str] = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+    CORS_METHODS: list[str] = ["*"]
 
     MONGOHOST: str = "localhost"
     MONGOPORT: str = "27017"

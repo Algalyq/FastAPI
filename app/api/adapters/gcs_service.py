@@ -1,4 +1,4 @@
-from google.cloud import storage,translate
+from google.cloud import storage,translate,speech
 import os 
 import base64   
 from typing import BinaryIO
@@ -12,7 +12,7 @@ from moviepy.editor import ImageSequenceClip
 import tempfile
 from PIL import Image
 from googletrans import Translator
- 
+from google.cloud.speech_v1 import types
 
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r'cert/gcs-key.json'
@@ -25,6 +25,68 @@ class GCStorage:
         self.storage_client = storage.Client()
         self.bucket_name = 'algalyq-bucket'
 
+
+    def export_transcript_to_storage_beta(
+        input_storage_uri: str = "",
+        output_storage_uri: str= "",
+        encoding: str = speech.RecognitionConfig.AudioEncoding.LINEAR16,
+        sample_rate_hertz: int = 8000,
+        language_code: str = "kk",
+        object_name: str = "algalyq/trans/",
+    ):
+        # input_uri URI for audio file in Cloud Storage, e.g. gs://[BUCKET]/[FILE]
+        audio = speech.RecognitionAudio(uri=input_storage_uri)
+
+        # Pass in the URI of the Cloud Storage bucket to hold the transcription
+        output_config = speech.TranscriptOutputConfig(gcs_uri=output_storage_uri)
+
+        # Speech configuration object
+        config = speech.RecognitionConfig(
+            encoding=encoding,
+            sample_rate_hertz=sample_rate_hertz,
+            language_code=language_code,
+        )
+
+        # Compose the long-running request
+        request = speech.LongRunningRecognizeRequest(
+            audio=audio, config=config, output_config=output_config
+        )
+
+        # create the speech client
+        speech_client = speech.SpeechClient()
+
+        # create the storage client
+        storage_client = storage.Client()
+
+        # run the recognizer to export transcript
+        operation = speech_client.long_running_recognize(request=request)
+
+        print("Waiting for operation to complete...")
+        operation.result(timeout=90)
+
+        # get bucket with name
+        bucket = self.storage_client.get_bucket(self.bucket_name)
+
+        # get blob from bucket
+        blob = bucket.get_blob(object_name)
+
+        # get content as bytes
+        results_bytes = blob.download_as_bytes()
+
+        # get transcript exported in storage bucket
+        storage_transcript = types.LongRunningRecognizeResponse.from_json(
+            results_bytes, ignore_unknown_fields=True
+        )
+
+        # Each result is for a consecutive portion of the audio. Iterate through
+        # them to get the transcripts for the entire audio file.
+        for result in storage_transcript.results:
+            # The first alternative is the most likely one for this portion.
+            print(f"Transcript: {result.alternatives[0].transcript}")
+            print(f"Confidence: {result.alternatives[0].confidence}")
+
+        # [END speech_transcribe_with_speech_to_storage_beta]
+        return storage_transcript.results
 
 
     def translate(self, text: str,fr: str,to: str):
