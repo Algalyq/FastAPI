@@ -4,6 +4,7 @@ import base64
 from typing import BinaryIO
 import uuid
 import io
+from fastapi import UploadFile
 import numpy as np
 import imageio
 import requests
@@ -14,6 +15,7 @@ from PIL import Image
 from googletrans import Translator
 from google.cloud.speech_v1 import types
 
+from fastapi.encoders import jsonable_encoder
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r'cert/gcs-key.json'
 
@@ -24,6 +26,24 @@ class GCStorage:
     def __init__(self):
         self.storage_client = storage.Client()
         self.bucket_name = 'algalyq-bucket'
+
+    def upload_audio(self,file: UploadFile):
+        # Create a client to interact with Google Cloud Storage
+        bucket = self.storage_client.get_bucket(self.bucket_name)
+       
+        # Set the destination file name in the bucket
+        destination_blob_name = file.filename
+
+        # Upload the file to Google Cloud Storage
+        blob = bucket.blob(destination_blob_name)
+        blob.upload_from_file(file.file, content_type="audio/wav")
+
+        # Close the file after upload
+        file.file.close()
+
+        # Return the URL of the uploaded file
+        return f"https://storage.googleapis.com/{self.bucket_name}/{destination_blob_name}"
+            
 
 
     def export_transcript_to_storage_beta(

@@ -1,40 +1,46 @@
-from fastapi import Depends, UploadFile, Form,File
+from fastapi import Depends, UploadFile, Form,File,Body
 from ..service import Service, get_service
 from . import router
 from app.utils import AppModel
 import os
 import io
 
+from app.utils import AppModel
 import wave
 
 
+class QueryRequest(AppModel):
+    query: str
+
 @router.post("/test")
-def djai2(
+def djai2(  
+    query: QueryRequest,
     svc: Service = Depends(get_service),
-    query: str = Form(...)
+  
 ):
-    kz2ru = svc.gcs_service.translate(query, "kk", "ru")
+    # return {"msg":query.query}
+    kz2ru = svc.gcs_service.translate(query.query, "kk", "ru")
     response = svc.lang.test(kz2ru)
     ru2kz = svc.gcs_service.translate(response, "ru", "kk")
     return {
         "kz2ru": kz2ru,
-        "ru2kz": ru2kz,
+        "msg": ru2kz,
         "original": response
     }
 
 
 
-
 @router.post("/audio")
-async def audio(audio: UploadFile = File(...),):
-    audio_data = audio.file.read()
-    # audio_data now contains the raw audio data in bytes
+def audio(
+    audio: UploadFile = File(...),
+    svc: Service = Depends(get_service)
+    ):
+    print(audio)
+    return svc.gcs_service.upload_audio(audio)
 
-    # Convert audio_data to a WAV file
-    with io.BytesIO(audio_data) as audio_stream:
-        wav_file = wave.open(audio_stream, 'rb')
-        # You can now process the WAV file as needed
-        # For example, you can read the audio frames using wav_file.readframes() or perform any audio processing operations.
+
+@router.post("/testv2")
+def v2test():
 
     # Return any desired response
-    return {"message": "Audio received and processed successfully."}
+    return "test"

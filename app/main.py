@@ -8,6 +8,7 @@ from fastapi.staticfiles import StaticFiles
 
 app = FastAPI(**fastapi_config)
 
+print(env.CORS_HEADERS)
 
 @app.on_event("shutdown")
 def shutdown_db_client():
