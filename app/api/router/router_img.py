@@ -39,8 +39,15 @@ def audio(
     return svc.gcs_service.upload_audio(audio)
 
 
+class Text2SpeechRequest(AppModel):
+    text: str
+
 @router.post("/testv2")
-def v2test():
+def v2test(
+    text: Text2SpeechRequest,
+    svc: Service = Depends(get_service),
+):
+    result = svc.azure.text2speech(text.text)
 
     # Return any desired response
-    return "test"
+    return {"msg": result}

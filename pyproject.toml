@@ -49,6 +49,7 @@ wolframalpha = "^5.0.0"
 google-cloud-translate = "^3.11.2"
 googletrans = "^3.0.0"
 google-cloud-speech = "^2.21.0"
+azure-cognitiveservices-speech = "^1.30.0"
 
 [tool.poetry.group.dev.dependencies]
 types-python-jose = "^3.3.4.7"
