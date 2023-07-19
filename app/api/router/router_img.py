@@ -42,8 +42,8 @@ def audio(
 class Text2SpeechRequest(AppModel):
     text: str
 
-@router.post("/testv2")
-def v2test(
+@router.post("/text-audio")
+def text2speech(
     text: Text2SpeechRequest,
     svc: Service = Depends(get_service),
 ):
