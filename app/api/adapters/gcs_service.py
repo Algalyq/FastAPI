@@ -29,7 +29,7 @@ class GCStorage:
 
     def __init__(self):
         self.storage_client = storage.Client()
-        self.bucket_name = 'algalyq-bucket'
+        self.bucket_name = 'algalyq'
 
 
     def text2speech(self, query: str):
@@ -149,7 +149,7 @@ class GCStorage:
 
     def translate(self, text: str,fr: str,to: str):
         client = translate.TranslationServiceClient()
-        project_id = "bionic-eye-384308"
+        project_id = "nurai-390616"
         location = "global"
 
         parent = f"projects/{project_id}/locations/{location}"
