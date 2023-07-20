@@ -46,8 +46,12 @@ class Text2SpeechRequest(AppModel):
 def text2speech(
     text: Text2SpeechRequest,
     svc: Service = Depends(get_service),
-):
-    result = svc.azure.text2speech(text.text)
 
-    # Return any desired response
-    return {"msg": result}
+):
+    link = svc.gcs_repository.check_text_exists(text.text)
+    if link:
+        return {"msg":link}
+    else:
+        result = svc.gcs_service.text2speech(text.text)
+        create_link = svc.gcs_repository.create_url(result, text.text)
+        return {"msg":result}

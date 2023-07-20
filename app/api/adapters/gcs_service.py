@@ -20,12 +20,50 @@ from fastapi.encoders import jsonable_encoder
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r'cert/gcs-key.json'
 
 
+SPEECH_REGION=os.getenv("SPEECH_REGION")
+SPEECH_KEY=os.getenv("SPEECH_KEY")
+
+
 
 class GCStorage:
 
     def __init__(self):
         self.storage_client = storage.Client()
         self.bucket_name = 'algalyq-bucket'
+
+
+    def text2speech(self, query: str):
+        url = f"https://{SPEECH_REGION}.tts.speech.microsoft.com/cognitiveservices/v1"
+        headers = {
+            "Ocp-Apim-Subscription-Key": SPEECH_KEY,
+            "Content-Type": "application/ssml+xml",
+            "X-Microsoft-OutputFormat": "audio-16khz-128kbitrate-mono-mp3"
+        }
+
+        data = f'''<speak version='1.0' xml:lang='kk-KZ'><voice xml:lang='kk-KZ' xml:gender='Male' name='kk-KZ-DauletNeural'>{query}</voice></speak>'''
+
+        data_utf8 = data.encode('utf-8')
+        response = requests.post(url, headers=headers, data=data_utf8)
+        if response.status_code == 200:
+            # Upload to Google Cloud Storage
+            unique_id = uuid.uuid4().hex
+            file_name = f"{unique_id}.mp3"
+
+            storage_client = storage.Client()
+            bucket = self.storage_client.bucket(self.bucket_name)
+            blob = bucket.blob(file_name)
+
+            # Use io.BytesIO to work with bytes in-memory
+            audio_bytes = io.BytesIO(response.content)
+            blob.upload_from_file(audio_bytes, content_type="audio/mpeg")
+            print(f"Audio file uploaded to Google Cloud Storage: gs://{self.bucket_name}/{file_name}")
+
+        else:
+            print(f"Error: {response.status_code} - {response.text}")
+
+        return f"https://storage.googleapis.com/{self.bucket_name}/{file_name}"
+
+
 
     def upload_audio(self,file: UploadFile):
         # Create a client to interact with Google Cloud Storage
