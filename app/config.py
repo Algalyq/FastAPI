@@ -12,9 +12,9 @@ class Config(BaseSettings):
     MONGOHOST: str = "localhost"
     MONGOPORT: str = "27017"
     MONGOUSER: str = "algalyq"
-    MONGOPASSWORD: str = "2003720An"
+    MONGOPASSWORD: str = "qijpoc-6mirHe-zybsan"
     MONGODATABASE: str = "fastapi"
-    MONGO_URL: str = "mongodb+srv://algalyq:2003720An@cluster0.zzr5jrn.mongodb.net/?retryWrites=true&w=majority"
+    MONGO_URL: str = "mongodb+srv://algalyq:qijpoc-6mirHe-zybsan@cluster0.zzr5jrn.mongodb.net/?retryWrites=true&w=majority"
 
 # environmental variables
 env = Config()

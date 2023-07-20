@@ -19,7 +19,7 @@ class LangService:
         pass
 
 
-    def test(self,query: str):
+    def model(self,query: str):
 
         # llm = OpenAI(temperature=0)
 
