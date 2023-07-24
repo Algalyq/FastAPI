@@ -40,7 +40,7 @@ class GCStorage:
             "X-Microsoft-OutputFormat": "audio-16khz-128kbitrate-mono-mp3"
         }
 
-        data = f'''<speak version='1.0' xml:lang='kk-KZ'><voice xml:lang='kk-KZ' xml:gender='Male' name='kk-KZ-DauletNeural'>{query}</voice></speak>'''
+        data = f'''<speak version='1.0' xml:lang='kk-KZ'><voice xml:lang='kk-KZ' xml:gender='Female' name='kk-KZ-AigulNeural'>{query}</voice></speak>'''
 
         data_utf8 = data.encode('utf-8')
         response = requests.post(url, headers=headers, data=data_utf8)
