@@ -42,3 +42,8 @@ def run(
         "msg": ru2kz,
     }
 
+
+
+@router.get("/")
+def test_run():
+    return {"msg":"Wake up"}
