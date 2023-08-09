@@ -43,14 +43,17 @@ def test_run():
 # body for writing reqest for translate
 class TranslateRequest(AppModel):
     query: str
-    to: str
     fr: str
+    to: str
 
 @router.post("/translater")
 def translate(
     query: TranslateRequest,
     svc: Service = Depends(get_service),
 ):
-    return svc.gcs_service.translate(query.query,query.fr,query.to)
+    translate = svc.gcs_service.translate(query.query,query.fr,query.to)
+    return {
+        "msg": translate
+    }
     
 
