@@ -51,6 +51,6 @@ def translate(
     query: TranslateRequest,
     svc: Service = Depends(get_service),
 ):
-    return svc.lang.model(query.query,query.fr,query.to)
+    return svc.gcs_service.translate(query.query,query.fr,query.to)
     
 
