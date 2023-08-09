@@ -17,15 +17,7 @@ def run(
     query: UserQueryRequest,
     svc: Service = Depends(get_service),
     ):
-    # return {"msg":query.query}
-    # check in collections to data 
-    # existing_content = svc.repository.check_text_exists(query.query)
-
-    # if existing_content:
-
-        # return {"msg": existing_content}
-
-    # else:
+    
         # translate kz to ru
     kz2ru = svc.gcs_service.translate(query.query, "kk", "ru")
     
@@ -47,3 +39,18 @@ def run(
 @router.get("/")
 def test_run():
     return {"msg":"Wake up"}
+
+# body for writing reqest for translate
+class TranslateRequest(AppModel):
+    query: str
+    to: str
+    fr: str
+
+@router.get("/translater")
+def translate(
+    query: TranslateRequest,
+    svc: Service = Depends(get_service),
+):
+    return svc.lang.model(query.query,query.fr,query.to)
+    
+
