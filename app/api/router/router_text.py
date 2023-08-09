@@ -46,7 +46,7 @@ class TranslateRequest(AppModel):
     to: str
     fr: str
 
-@router.get("/translater")
+@router.post("/translater")
 def translate(
     query: TranslateRequest,
     svc: Service = Depends(get_service),
