@@ -28,16 +28,6 @@ class LangService:
 
     def model(self,query: str):
 
-        # llm = OpenAI(temperature=0)
-
-        # tools = load_tools(["serpapi","llm-math","wolfram-alpha"],llm=llm,serpapi_api_key=serpapi,
-        #                                                                wolfram_alpha_appid=wolf)
-
-        # agent = initialize_agent(tools,llm, agent="zero-shot-react-description",verbose=True)
-
-        # return agent.run(query,length=256) 
-
-
         llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613")
         search = SerpAPIWrapper()
         llm_math_chain = LLMMathChain.from_llm(llm=llm, verbose=True)
